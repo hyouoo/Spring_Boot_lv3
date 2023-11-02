@@ -1,18 +1,17 @@
 package com.sparta.lv3.entity;
 
+import lombok.Getter;
+
+@Getter
 public enum Division {
     DEVELOPMENT(Authority.MANAGER),
-    CURICULLUM(Authority.MANAGER),
-    MARKETTING(Authority.STAFF);
+    CURRICULUM(Authority.MANAGER),
+    MARKETING(Authority.STAFF);
 
     private final String authority;
 
     Division(String authority) {
         this.authority = authority;
-    }
-
-    public String getAuthority() {
-        return this.authority;
     }
 
     public static class Authority {

@@ -1,7 +1,7 @@
 package com.sparta.lv3.entity;
 
+import com.sparta.lv3.dto.AdminRequestDto;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,13 +14,16 @@ public class Admin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email
     private String email;
 
     private String pw;
 
     @Enumerated(value = EnumType.STRING)
-    private Division div;
+    private Division division;
 
-
+    public Admin(String email, String pw, Division division) {
+        this.email = email;
+        this.pw = pw;
+        this.division = division;
+    }
 }
