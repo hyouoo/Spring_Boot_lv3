@@ -1,6 +1,5 @@
 package com.sparta.lv3.entity;
 
-import com.sparta.lv3.dto.AdminRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

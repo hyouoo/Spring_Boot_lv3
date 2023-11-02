@@ -1,6 +1,5 @@
 package com.sparta.lv3.dto;
 
-import jakarta.persistence.Column;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 
