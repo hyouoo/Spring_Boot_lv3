@@ -2,12 +2,10 @@ package com.sparta.lv3.dto;
 
 import com.sparta.lv3.entity.Category;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 
 @Getter
-public class LectureRequestDto {
-
+public class LectureModifyRequestDto {
     @NotBlank
     private String title;
 
@@ -16,7 +14,4 @@ public class LectureRequestDto {
     private String description;
 
     private Category category;
-
-    @NotNull
-    private Long tutorId;
 }

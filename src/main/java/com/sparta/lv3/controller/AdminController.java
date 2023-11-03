@@ -1,8 +1,10 @@
 package com.sparta.lv3.controller;
 
 import com.sparta.lv3.dto.AdminRequestDto;
+import com.sparta.lv3.dto.LoginRequestDto;
 import com.sparta.lv3.entity.Admin;
 import com.sparta.lv3.service.AdminService;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -29,8 +31,12 @@ public class AdminController {
     }
 
     @PostMapping("/login")
-    public void loginAdmin() {
-
+    public ResponseEntity<String> loginAdmin(@RequestBody @Valid LoginRequestDto loginRequestDto, HttpServletResponse response) {
+        Admin admin = adminService.loginAdmin(loginRequestDto, response);
+        return new ResponseEntity<>(
+                String.format("%s로 로그인 완료", admin.getDivision().getAuthority().substring(5)),
+                HttpStatus.OK
+        );
     }
 
 }

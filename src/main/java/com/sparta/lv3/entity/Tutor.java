@@ -39,11 +39,10 @@ public class Tutor {
         this.comment = requestDto.getComment();
     }
 
-    public Tutor updateTutor(Tutor tutor) {
-        this.career = tutor.getCareer();
-        this.company = tutor.getCompany();
-        this.phone = tutor.getPhone();
-        this.comment = tutor.getComment();
-        return this;
+    public void updateTutor(TutorRequestDto tutorRequestDto) {
+        this.career = tutorRequestDto.getCareer();
+        this.company = tutorRequestDto.getCompany();
+        this.phone = tutorRequestDto.getPhone();
+        this.comment = tutorRequestDto.getComment();
     }
 }

@@ -1,5 +1,6 @@
 package com.sparta.lv3.entity;
 
+import com.sparta.lv3.dto.LectureModifyRequestDto;
 import com.sparta.lv3.dto.LectureRequestDto;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -36,11 +37,10 @@ public class Lecture extends TimeStamped {
         this.tutor = tutor;
     }
 
-    public Lecture updateLecture(Lecture lecture) {
-        this.title = lecture.getTitle();
-        this.price = lecture.getPrice();
-        this.category = lecture.getCategory();
-        this.description = lecture.getDescription();
-        return this;
+    public void updateLecture(LectureModifyRequestDto requestDto) {
+        this.title = requestDto.getTitle();
+        this.price = requestDto.getPrice();
+        this.category = requestDto.getCategory();
+        this.description = requestDto.getDescription();
     }
 }
