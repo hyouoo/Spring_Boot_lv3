@@ -3,15 +3,14 @@ package com.sparta.lv3.controller;
 import com.sparta.lv3.dto.LectureModifyRequestDto;
 import com.sparta.lv3.dto.LectureRequestDto;
 import com.sparta.lv3.dto.LectureResponseDto;
-import com.sparta.lv3.entity.Admin;
 import com.sparta.lv3.entity.Category;
-import com.sparta.lv3.exception.AuthorityViolationException;
+import com.sparta.lv3.entity.Division;
 import com.sparta.lv3.service.LectureService;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -39,26 +38,17 @@ public class LectureController {
         return lectureService.getLectureByCategory(category);
     }
 
+    @Secured(Division.Authority.MANAGER)
     @PutMapping("/{id}")
     public LectureResponseDto updateLecture(@PathVariable Long id,
-                                            @RequestBody @Valid LectureModifyRequestDto requestDto,
-                                            HttpServletRequest request) {
-        Admin admin = (Admin) request.getAttribute("admin");
-        checkAuthority(admin);
+                                            @RequestBody @Valid LectureModifyRequestDto requestDto) {
         return lectureService.updateLecture(id, requestDto);
     }
 
+    @Secured(Division.Authority.MANAGER)
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteLecture(@PathVariable Long id, HttpServletRequest request) {
-        Admin admin = (Admin) request.getAttribute("admin");
-        checkAuthority(admin);
+    public ResponseEntity<String> deleteLecture(@PathVariable Long id) {
         String title = lectureService.deleteLecture(id);
         return new ResponseEntity<>(String.format("%s 강의 삭제 완료", title), HttpStatus.ACCEPTED);
-    }
-
-    private void checkAuthority(Admin admin) {
-        if (admin.getDivision().getAuthority().equals("ROLE_STAFF")) {
-            throw new AuthorityViolationException("수정 권한이 없습니다.");
-        }
     }
 }
