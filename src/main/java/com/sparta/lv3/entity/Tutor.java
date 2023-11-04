@@ -28,7 +28,7 @@ public class Tutor {
     @Column(length = 500)
     private String comment;
 
-    @OneToMany(mappedBy = "tutor")
+    @OneToMany(mappedBy = "tutor", cascade = CascadeType.PERSIST, orphanRemoval = true)
     private List<Lecture> lectureList = new ArrayList<>();
 
     public Tutor(TutorRequestDto requestDto) {
