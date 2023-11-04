@@ -30,32 +30,28 @@ public class AdminDetails implements UserDetails {
     }
 
     @Override
-    public String getPassword() {
-        return admin.getPw();
-    }
+    public String getPassword() { return admin.getPassword(); }
 
     @Override
-    public String getUsername() {
-        return admin.getEmail();
-    }
+    public String getUsername() { return admin.getEmail(); }
 
     @Override
     public boolean isAccountNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return false;
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return false;
+        return true;
     }
 }

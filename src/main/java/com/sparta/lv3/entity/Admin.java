@@ -16,14 +16,14 @@ public class Admin {
     @Column(unique = true)
     private String email;
 
-    private String pw;
+    private String password;
 
     @Enumerated(value = EnumType.STRING)
     private Division division;
 
-    public Admin(String email, String pw, Division division) {
+    public Admin(String email, String password, Division division) {
         this.email = email;
-        this.pw = pw;
+        this.password = password;
         this.division = division;
     }
 }

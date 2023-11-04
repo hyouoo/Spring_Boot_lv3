@@ -2,6 +2,7 @@ package com.sparta.lv3.config;
 
 import com.sparta.lv3.filter.JwtAuthenticationFilter;
 import com.sparta.lv3.filter.JwtAuthorizationFilter;
+import com.sparta.lv3.filter.LoggingFilter;
 import com.sparta.lv3.jwt.JwtUtil;
 import com.sparta.lv3.security.AdminDetailsService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +10,7 @@ import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,9 +28,15 @@ public class WebSecurityConfig {
     private final AdminDetailsService adminDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
 
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
         return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    public LoggingFilter loggingFilter() {
+        return new LoggingFilter();
     }
 
     @Bean
@@ -48,19 +56,24 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.sessionManagement((sessionManagement) ->
-                        sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/api/admin/**").permitAll()
                 .anyRequest().authenticated());
 
-        http.formLogin((formLogin) -> formLogin
-                .loginProcessingUrl("api/admin/login")
-                .permitAll());
+//        http.formLogin(Customizer.withDefaults());
+//        http.formLogin((formLogin) -> formLogin
+//                .loginProcessingUrl("/api/login-page")
+//                .permitAll());
 
-        http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
-        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class)
+                .addFilterBefore(loggingFilter(), JwtAuthorizationFilter.class);
+
+//        http.exceptionHandling((exception) ->
+//                exception.accessDeniedPage("/forbidden.html"));
 
         return http.build();
     }
