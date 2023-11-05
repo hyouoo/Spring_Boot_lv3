@@ -1,5 +1,6 @@
 package com.sparta.lv3.config;
 
+import com.sparta.lv3.exception.DelegatedAuthenticationEntryPoint;
 import com.sparta.lv3.filter.JwtAuthenticationFilter;
 import com.sparta.lv3.filter.JwtAuthorizationFilter;
 import com.sparta.lv3.filter.LoggingFilter;
@@ -26,7 +27,7 @@ public class WebSecurityConfig {
     private final JwtUtil jwtUtil;
     private final AdminDetailsService adminDetailsService;
     private final AuthenticationConfiguration authenticationConfiguration;
-
+    private final DelegatedAuthenticationEntryPoint delegatedAuthenticationEntryPoint;
 
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
@@ -55,12 +56,14 @@ public class WebSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable);
 
         http.sessionManagement((sessionManagement) ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+        );
 
         http.authorizeHttpRequests((requests) -> requests
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations()).permitAll()
                 .requestMatchers("/api/admin/**").permitAll()
-                .anyRequest().authenticated());
+                .anyRequest().authenticated()
+        );
 
 //        http.formLogin(Customizer.withDefaults());
 //        http.formLogin((formLogin) -> formLogin
@@ -71,8 +74,9 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class)
                 .addFilterBefore(loggingFilter(), JwtAuthorizationFilter.class);
 
-//        http.exceptionHandling((exception) ->
-//                exception.accessDeniedPage("/forbidden.html"));
+        http.exceptionHandling((handling) -> handling
+                .authenticationEntryPoint(delegatedAuthenticationEntryPoint)
+        );
 
         return http.build();
     }
