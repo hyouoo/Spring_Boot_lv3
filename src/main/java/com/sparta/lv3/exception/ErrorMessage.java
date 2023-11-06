@@ -1,8 +1,15 @@
 package com.sparta.lv3.exception;
 
+import lombok.Getter;
+import org.springframework.http.HttpStatus;
+
+@Getter
 public class ErrorMessage {
-    public ErrorMessage(String message, int statusCode) {
-        String error = String.format("message : %s", message);
-        String status = String.format("status code : %d", statusCode);
+    private final String message;
+    private final String status;
+
+    public ErrorMessage(String message, HttpStatus status) {
+        this.message = message;
+        this.status = status.getReasonPhrase();
     }
 }
